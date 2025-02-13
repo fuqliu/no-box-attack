@@ -23,15 +23,15 @@ parser.add_argument('--attack_type', type=str, default='FGSM')
 parser.add_argument('--noise_energy', type=float, default=0.1)
 parser.add_argument('--FGSM_para', type=float, default=0.001)
 parser.add_argument('--FGSM_config', type=str, default='target')
-parser.add_argument('--BIM_config', type=str, default='target')
-parser.add_argument('--BIM_para', type=float, default=0.000025)
+parser.add_argument('--no_box_config', type=str, default='target')
+parser.add_argument('--no_box_para', type=float, default=0.000025)
 parser.add_argument('--clip_epoch', type=int, default=20)
 parser.add_argument('--clip_e', type=float, default=0.1)
 
 args = parser.parse_args()
 print(f'Training configs: {args}')
 
-attacktype = ['none','GWN','FGSM','BIM']
+attacktype = ['none','GWN','FGSM','no-box']
 n, n_his, n_pred = args.n_route, args.n_his, args.n_pred
 n_train, n_val, n_test = 34, 5, 5
 load_path = args.load_path
@@ -39,7 +39,7 @@ batch_size = args.batch_size
 attack_type = args.attack_type
 noise_energy = args.noise_energy
 FGSM_config, FGSM_para = args.FGSM_config, args.FGSM_para
-BIM_config, BIM_para = args.BIM_config, args.BIM_para
+no_box_config, no_box_para = args.no_box_config, args.no_box_para
 clip_epoch, clip_e = args.clip_epoch, args.clip_e
 
 # data loading
@@ -73,7 +73,7 @@ elif attack_type == attacktype[2]:
 
 elif attack_type == attacktype[3]:
     
-    noise = ite_generate_adversary(load_path, x_test, n_his, n_pred, BIM_para, BIM_config, clip_epoch, clip_e)
+    noise = ite_generate_adversary(load_path, x_test, n_his, n_pred, no_box_para, no_box_config, clip_epoch, clip_e)
     adversarial_x_test = x_test + noise
 
 else:
